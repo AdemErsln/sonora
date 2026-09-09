@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonora - Birlikte Dinle</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f111a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            background: #1a1d2e;
+            border: 1px solid #2e344e;
+            border-radius: 16px;
+            padding: 36px 28px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        p {
+            color: #9aa5ce;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #6366f1;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-bottom: 12px;
+        }
+        .btn:hover {
+            background: #4f46e5;
+        }
+        .fallback-btn {
+            background: #282c3f;
+            color: #c0caf5;
+        }
+        .fallback-btn:hover {
+            background: #343a52;
+        }
+        .hint {
+            font-size: 12px;
+            color: #565f89;
+            margin-top: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">🎵</div>
+        <h1>Sonora Party</h1>
+        <p>Birlikte dinlemek için Sonora uygulaması açılıyor...</p>
+        
+        <a id="open-sonora" class="btn" href="#">Sonora'da Aç</a>
+        <a id="open-web" class="btn fallback-btn" href="#">Web'de Dinle</a>
+        
+        <div class="hint">Sonora yüklüyse otomatik olarak başlayacaktır. Yüklü değilse Web'de Dinle'ye tıklayabilirsiniz.</div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id') || '';
+        const provider = params.get('p') || 'youtube';
+
+        let webUrl = 'https://music.youtube.com/watch?v=' + id;
+        if (provider === 'spotify') {
+            webUrl = 'https://open.spotify.com/track/' + id;
+        }
+
+        const sonoraUrl = 'sonora://party/' + id;
+        document.getElementById('open-sonora').href = sonoraUrl;
+        document.getElementById('open-web').href = webUrl;
+
+        if (id) {
+            // Sonora yüklüyse açmayı dene
+            window.location.href = sonoraUrl;
+
+            // Eğer Sonora yüklü değilse 2.5 saniye sonra web oynatıcıya yönlendir
+            setTimeout(() => {
+                window.location.href = webUrl;
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
